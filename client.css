@@ -1,0 +1,32 @@
+
+:root {
+
+}
+
+
+* {
+	padding: 0;
+	margin: 0;
+	box-sizing: border-box;
+}
+body {
+	background-color: white;
+}
+
+main {
+	width: 100vw;
+	height: 100vh;
+}
+section#canvas-container {
+	width: 100%;
+	height: 100%;
+}
+section#canvas-container canvas {
+	width: 100%;
+	height: 100%;
+	display: block;
+	border: 0.5px solid red;
+}
+
+
+/* end of file */
