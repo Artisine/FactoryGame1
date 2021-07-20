@@ -1,3 +1,4 @@
+import World from "./world.js";
 
 
 export default class Canvas {
@@ -8,6 +9,8 @@ export default class Canvas {
 		this.canvasElement = undefined;
 		this.renderingContext = undefined;
 		this.ctx = undefined;
+
+		this.worldsMap = new Map();
 
 		this.width = 0;
 		this.height = 0;
@@ -20,6 +23,10 @@ export default class Canvas {
 			}
 		}
 
+		this.visible = true;
+		this.resizeObserver = undefined;
+
+		
 		this.renderQueue = [];
 	}
 	init() {
@@ -28,7 +35,44 @@ export default class Canvas {
 			document.querySelector("#canvas-container").appendChild(this.canvasElement);
 		}
 		this.setCanvas(this.canvasElement);
+		// const resizeObserver = new ResizeObserver(entries => {
+		// 	for (let entry of entries) {
+		// 	  if(entry.contentBoxSize) {
+		// 		// Firefox implements `contentBoxSize` as a single content rect, rather than an array
+		// 		const contentBoxSize = Array.isArray(entry.contentBoxSize) ? entry.contentBoxSize[0] : entry.contentBoxSize;
+				
+		// 		h1Elem.style.fontSize = Math.max(1.5, contentBoxSize.inlineSize / 200) + 'rem';
+		// 		pElem.style.fontSize = Math.max(1, contentBoxSize.inlineSize / 600) + 'rem';
+		// 	  } else {
+		// 		h1Elem.style.fontSize = Math.max(1.5, entry.contentRect.width / 200) + 'rem';
+		// 		pElem.style.fontSize = Math.max(1, entry.contentRect.width / 600) + 'rem';
+		// 	  }
+		// 	}
+			
+		// 	console.log('Size changed');
+		//   });
+		this.resizeObserver = new ResizeObserver((entries)=>{
+			// console.log(entries);
+			const found = entries.find((item) => item.target === this.canvasElement);
+			if (found) {
+				this.width = found.contentRect.width;
+				this.height = found.contentRect.height;
+				this.halfWidth = this.width / 2;
+				this.halfHeight = this.height / 2;
+				// console.log(found);
+				this.resize();
+			}
+		});
+		this.resizeObserver.observe(this.canvasElement);
+		this.resize();
+
 		return this;
+	}
+
+	resize() {
+		this.canvasElement.width = this.width;
+		this.canvasElement.height = this.height;
+		
 	}
 	setCanvas(canvasElement) {
 		this.canvasElement = canvasElement;
@@ -38,10 +82,20 @@ export default class Canvas {
 
 
 	registerWorld(world) {
-
+		if (world instanceof World) {
+			this.worldsMap.set(world.uid, world);
+			world.canvas = this;
+		}
 	}
 	deregisterWorld(world) {
-		
+		if (typeof world === "string") {
+			this.worldsMap.get(world).canvas = undefined;
+			this.worldsMap.delete(world);
+		}
+		if (world instanceof World) {
+			world.canvas = undefined;
+			this.worldsMap.delete(world.uid);
+		}
 	}
 
 	// addToRenderQueue(instance) {

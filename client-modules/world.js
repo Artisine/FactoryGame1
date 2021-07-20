@@ -49,7 +49,7 @@ export default class World {
 	}
 
 	updateloop() {
-		window.requestAnimationFrame(this.updateloop);
+		window.requestAnimationFrame(this.updateloop.bind(this));
 
 		// logic first
 		for (let [key, obj] of this.instancesMap) {
@@ -61,11 +61,12 @@ export default class World {
 			obj.render();
 		}
 
+		// console.log(`update loop`);
 	}
 
 	init() {
-
-		window.requestAnimationFrame.bind(this, this.updateloop);
+		
+		window.requestAnimationFrame(this.updateloop.bind(this));
 		// window.requestAnimationFrame(this.updateloop);
 
 		console.info(`World ${this.uid} init.`);

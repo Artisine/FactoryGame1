@@ -6,18 +6,10 @@ export default class Vector2 {
 
 
 	constructor(...initArgs) {
-		if (initArgs.length === 2) {
-			this.x = initArgs[0];
-			this.y = initArgs[1];
-		} else if (initArgs.length === 1 && initArgs[0] instanceof Vector2) {
-			this.x = initArgs[0].x;
-			this.y = initArgs[0].y;
-		} else if (initArgs.length === 1 && typeof initArgs[0] === "object") {
-			this.x = initArgs[0].x;
-			this.y = initArgs[0].y;
-		} else {
-			throw new Error("Invalid parameters provided to Vector2.");
-		}
+		this.className = "Vector2";
+		this.x = undefined;
+		this.y = undefined;
+		this.selfSet(...initArgs);
 
 
 	}
@@ -62,4 +54,21 @@ export default class Vector2 {
 		return (otherVec.x * this.x + otherVec.y * this.y);
 	}
 
+
+
+	selfSet(...initArgs) {
+		console.log({initArgs});
+		if (initArgs.length === 2) {
+			this.x = initArgs[0];
+			this.y = initArgs[1];
+		} else if (initArgs.length === 1 && initArgs[0] instanceof Vector2) {
+			this.x = initArgs[0].x;
+			this.y = initArgs[0].y;
+		} else if (initArgs.length === 1 && typeof initArgs[0] === "object") {
+			this.x = initArgs[0].x;
+			this.y = initArgs[0].y;
+		} else {
+			throw new Error("Invalid parameters provided to Vector2.");
+		}
+	}
 };

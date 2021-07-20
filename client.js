@@ -4,31 +4,28 @@ import Vector2 from "./client-modules/vector2.js";
 import Canvas from "./client-modules/canvas.js";
 import Instance from "./client-modules/instance.js";
 import Entity from "./client-modules/entity.js";
-
+import Marker from "./client-modules/marker.js";
 import World from "./client-modules/world.js";
 
 
 
-const MainCanvas = new Canvas({
+export const MainCanvas = new Canvas({
 	canvasElement: document.querySelector("#canvas-container > canvas")
 }).init();
 
 console.log(MainCanvas);
 
-const TestMap = new World("TestMap");
+export const TestMap = new World("TestMap");
+
+MainCanvas.registerWorld(TestMap);
 TestMap.init();
 
 
 
-const bob = new Entity();
-console.log(bob);
-
-TestMap.addEntity(bob);
-
-console.log(bob);
-
-
-
+const sam = new Marker();
+sam.position.selfSet(100, 100);
+TestMap.addEntity(sam);
+console.log({sam});
 
 
 
