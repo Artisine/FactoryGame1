@@ -57,13 +57,16 @@ export default class Vector2 {
 
 
 	selfSet(...initArgs) {
-		console.log({initArgs});
+		// console.log({initArgs});
 		if (initArgs.length === 2) {
 			this.x = initArgs[0];
 			this.y = initArgs[1];
 		} else if (initArgs.length === 1 && initArgs[0] instanceof Vector2) {
 			this.x = initArgs[0].x;
 			this.y = initArgs[0].y;
+		} else if (initArgs.length === 1 && typeof initArgs[0] === "object" && initArgs[0].length !== undefined) {
+			this.x = initArgs[0];
+			this.y = initArgs[1];
 		} else if (initArgs.length === 1 && typeof initArgs[0] === "object") {
 			this.x = initArgs[0].x;
 			this.y = initArgs[0].y;

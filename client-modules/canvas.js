@@ -6,6 +6,8 @@ export default class Canvas {
 	
 
 	constructor(initArgs = {}) {
+		this.className = "Canvas";
+
 		this.canvasElement = undefined;
 		this.renderingContext = undefined;
 		this.ctx = undefined;
@@ -80,6 +82,9 @@ export default class Canvas {
 		this.ctx = this.renderingContext;
 	}
 
+	wipe() {
+		this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
+	}
 
 	registerWorld(world) {
 		if (world instanceof World) {
@@ -116,8 +121,20 @@ export default class Canvas {
 	square(x, y, sx, sy) {
 		this.rect(x, y, sx, sy);
 	}
+	// centerSquare(x, y, sx, sy) {
+	// 	this.square(x - sx/2, y - sy/2, x + sx/2, y + sy/2);
+	// }
+
 	centerSquare(x, y, sx, sy) {
-		this.square(x, y, x + sx/2, y + sy/2);
+		const hsx = sx / 2;
+		const hsy = sy / 2;
+		this.ctx.beginPath();
+		this.ctx.moveTo(x - hsx, y - hsy);
+		this.ctx.lineTo(x - hsx, y + hsy);
+		this.ctx.lineTo(x + hsx, y + hsy);
+		this.ctx.lineTo(x + hsx, y - hsy);
+		this.ctx.lineTo(x - hsx, y - hsy);
+		this.ctx.closePath();
 	}
 
 

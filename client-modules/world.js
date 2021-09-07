@@ -22,34 +22,55 @@ export default class World {
 		 */
 		this.canvas = undefined;
 
+		/**
+		 * @var {PhysicsEngine | undefined} this.physicsEngine;
+		 */
+		this.physicsEngine = undefined;
+
 
 		if (!World.GlobalMap.has(this.uid)) {
 			World.GlobalMap.set(this.uid, this);
 		}
 	}
 
-	addEntity(ent) {
-		if (ent instanceof Entity) {
-			this.instancesMap.set(ent.id, ent);
-			ent.world = this;
-		} else {
-			throw new Error("Uh oh, ent was not of type Entity");
-		}
+	/**
+	 * 
+	 * @param  {...Entity} ents 
+	 */
+	addEntity(...ents) {
+		ents.forEach((ent) => {
+			if (ent instanceof Entity) {
+				this.instancesMap.set(ent.id, ent);
+				ent.world = this;
+			} else {
+				throw new Error("Uh oh, ent was not of type Entity");
+			}
+		});
 	}
-	removeEntity(ent) {
-		if (typeof ent === "string" && this.instancesMap.has(ent)) {
-			this.instancesMap.get(ent).world = undefined;
-			this.instancesMap.delete(ent);
-		} else if (ent instanceof Entity) {
-			ent.world = undefined;
-			this.instancesMap.delete(ent.id);
-		} else {
-			throw new Error("Uh oh, ent was not of type Entity or string.");
-		}
+
+	/**
+	 * 
+	 * @param  {...Entity} ents 
+	 */
+	removeEntity(...ents) {
+		ents.forEach((ent) => {
+			if (typeof ent === "string" && this.instancesMap.has(ent)) {
+				this.instancesMap.get(ent).world = undefined;
+				this.instancesMap.delete(ent);
+			} else if (ent instanceof Entity) {
+				ent.world = undefined;
+				this.instancesMap.delete(ent.id);
+			} else {
+				throw new Error("Uh oh, ent was not of type Entity or string.");
+			}
+
+		});
 	}
 
 	updateloop() {
 		window.requestAnimationFrame(this.updateloop.bind(this));
+
+		this.canvas.wipe();
 
 		// logic first
 		for (let [key, obj] of this.instancesMap) {

@@ -19,4 +19,8 @@ export default class Instance {
 			Instance.GlobalMap.set(this.id, this);
 		}
 	}
+
+	selfLog() {
+		return `${this.className} ${this.name} ${this.id}`;
+	}
 };
